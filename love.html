@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<h6>
+      <video autoplay muted loop playsinline src="love.mp4" alt=" logo" class="">
+    </h6>
+<title>Do you love me?</title>
+
+<style>
+:root {
+  --pink:#ff4d6d;
+  --gray:#8e8e93;
+}
+
+
+* {
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+}
+
+body{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:
+    env(safe-area-inset-top)
+    env(safe-area-inset-right)
+    env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  text-align:center;
+}
+
+/* ❤️ Animated title */
+.love-title{
+  color:var(--pink);
+  font-size:clamp(2rem,6vw,2.8rem);
+  margin-bottom:50px;
+  animation:
+    fadeIn 1s ease forwards,
+    heartbeat 2.2s ease-in-out infinite;
+}
+
+@keyframes heartbeat{
+  0%   { transform:scale(1);   text-shadow:0 0 0 rgba(255,77,109,0); }
+  25%  { transform:scale(1.05);text-shadow:0 0 18px rgba(255,77,109,.4); }
+  40%  { transform:scale(1); }
+  60%  { transform:scale(1.04);text-shadow:0 0 22px rgba(255,77,109,.45); }
+  100% { transform:scale(1);   text-shadow:0 0 0 rgba(255,77,109,0); }
+}
+
+.btn-wrapper{
+  display:flex;
+  gap:20px;
+}
+
+button{
+  padding:16px 40px;
+  font-size:1.2rem;
+  font-weight:600;
+  border:none;
+  border-radius:999px;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+  transition:.25s;
+}
+
+button:active{transform:scale(.95)}
+
+#yesBtn{
+  background:var(--pink);
+  color:#fff;
+}
+
+#noBtn{
+  background:var(--gray);
+  color:#fff;
+  position:relative;
+}
+
+.watermark{
+  position:fixed;
+  bottom:calc(12px + env(safe-area-inset-bottom));
+  font-size:.75rem;
+  opacity:.25;
+}
+
+/* Slideshow */
+#slideshow{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.88);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+#slideshow img{
+  max-width:85%;
+  max-height:85%;
+  object-fit:contain;
+  position:absolute;
+  opacity:0;
+  transition:opacity 1.2s ease;
+}
+
+#slideshow img.active{opacity:1}
+
+/* Fake chat */
+#fakeChat{
+  position:fixed;
+  bottom:calc(80px + env(safe-area-inset-bottom));
+  width:100%;
+  display:none;
+  flex-direction:column;
+  gap:10px;
+  padding:0 16px;
+  z-index:1001;
+}
+
+.msg{
+  max-width:75%;
+  padding:12px 16px;
+  border-radius:18px;
+  font-size:1rem;
+  animation:pop .4s ease forwards;
+}
+
+.msg.left{
+  align-self:flex-start;
+  background:#e5e5ea;
+}
+
+.msg.right{
+  align-self:flex-end;
+  background:var(--pink);
+  color:#fff;
+}
+
+@keyframes pop{
+  from{opacity:0;transform:scale(.8)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* Flowers */
+.flower{
+  position:fixed;
+  pointer-events:none;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  from{transform:translateY(-40px) rotate(0);opacity:1}
+  to{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+
+<body>
+
+<h1 class="love-title">Do you love me? ❤️</h1>
+
+<div class="btn-wrapper">
+  <button id="yesBtn">Yes</button>
+  <button id="noBtn">No</button>
+</div>
+
+<div class="watermark">MADE BY Reach</div>
+
+<div id="slideshow"></div>
+
+<div id="fakeChat">
+<div class="msg left">Hey… 🥺</div>
+  <div class="msg left">I have something to say…🥹</div>
+  <div class="msg left">Emm...😫</div>
+  <div class="msg left">I love you 🥺❤️</div>
+  <div class="msg left">I wanna live with you🥺</div>
+  <div class="msg left"> Can i be your only one?</div>
+</div>
+
+<audio id="bgMusic" src="music.mp3" loop playsinline></audio>
+
+<script>
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const slideshow=document.getElementById("slideshow");
+const bgMusic=document.getElementById("bgMusic");
+const fakeChat=document.getElementById("fakeChat");
+
+const images=[
+ "image1.jpg","image2.jpg","image3.jpg",
+ "image4.jpg","image5.jpg","image6.jpg","image7.jpg"
+];
+
+function moveNo(){
+ noBtn.style.position="fixed";
+ noBtn.style.left=Math.random()*(innerWidth-noBtn.offsetWidth)+"px";
+ noBtn.style.top=Math.random()*(innerHeight-noBtn.offsetHeight)+"px";
+}
+
+noBtn.addEventListener("touchstart",moveNo);
+noBtn.addEventListener("click",moveNo);
+
+yesBtn.addEventListener("click",()=>{
+ bgMusic.play().catch(()=>{});
+ startSlideshow();
+ showMessages();
+});
+
+function startSlideshow(){
+ slideshow.innerHTML="";
+ slideshow.style.display="flex";
+
+ images.forEach((src,i)=>{
+  const img=document.createElement("img");
+  img.src=src;
+  if(i===0)img.classList.add("active");
+  slideshow.appendChild(img);
+ });
+
+ const slides=slideshow.querySelectorAll("img");
+ let index=0;
+
+ function next(){
+  slides[index].classList.remove("active");
+  index=(index+1)%slides.length;
+  slides[index].classList.add("active");
+  dropFlowers();
+  setTimeout(next,2200);
+ }
+ setTimeout(next,2000);
+}
+
+function dropFlowers(){
+ for(let i=0;i<6;i++){
+  const f=document.createElement("div");
+  f.className="flower";
+  f.textContent="🌸";
+  f.style.left=Math.random()*innerWidth+"px";
+  f.style.fontSize=16+Math.random()*18+"px";
+  f.style.animationDuration=3+Math.random()*2+"s";
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),5000);
+ }
+}
+
+function showMessages(){
+ fakeChat.style.display="flex";
+ const msgs=fakeChat.querySelectorAll(".msg");
+ msgs.forEach(m=>m.style.display="none");
+ msgs.forEach((m,i)=>{
+  setTimeout(()=>{m.style.display="block"},i*1600);
+ });
+}
+</script>
+
+</body>
+</html>
